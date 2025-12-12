@@ -130,72 +130,62 @@ Tidak ada library eksternal lain seperti pygame yang digunakan.
 Proyek ini dibuat untuk kebutuhan pembelajaran dan eksplorasi algoritma klasik. Bebas digunakan dan dimodifikasi.
 
 
-# Largest Monotonically Increasing Subsequence (LMIS)
 
-Program Python ini dibuat untuk menemukan sub-urutan naik terpanjang (Largest Monotonically Increasing Subsequence / LMIS) dari sekumpulan angka acak. Solusi diimplementasikan menggunakan struktur data Tree dan algoritma rekursif (DFS) untuk mengeksplorasi semua kemungkinan jalur urutan naik.
 
 ---
 
-## Input Program
+## Catatan Teknis Implementasi
 
-Input tidak diambil dari pengguna, melainkan didefinisikan langsung di dalam kode.
+Implementasi LIS menggunakan struktur Tree dalam program ini memiliki beberapa detail penting:
 
-Default Sequence:
+### 1. Root Dummy sebagai Titik Awal
+Tree dibangun menggunakan sebuah node akar (root) khusus yang tidak mewakili angka asli pada input.  
+Node ini memiliki nilai `-∞` dan index `-1`. Tujuannya:
+
+- Menjadi titik awal universal.
+- Memungkinkan semua angka dalam `input_sequence` menjadi kandidat node pertama.
+  
+Hal ini membuat pencarian LIS dapat dilakukan tanpa harus memilih elemen awal tertentu.
+
+### 2. Setiap Node Menyimpan Nilai dan Index
+Objek `TreeNode` menyimpan:
+
+- `value` → nilai angka
+- `index` → posisi angka pada list input
+- `children` → cabang angka yang lebih besar setelah index saat ini
+
+Penyimpanan index memastikan setiap node hanya bercabang ke angka yang muncul **setelah posisi node saat ini** sehingga menjaga urutan LIS tetap valid.
+
+### 3. Proses Pembangunan Tree
+Fungsi `build_lis_tree()` bekerja dengan aturan:
+
+- Untuk setiap node, program mencari angka di posisi berikutnya yang lebih besar.
+- Jika ditemukan, node baru dibuat sebagai anak (child).
+- Proses ini berjalan rekursif hingga seluruh jalur kemungkinan terbentuk.
+
+Struktur yang dihasilkan adalah sebuah pohon yang merepresentasikan seluruh urutan naik yang mungkin.
+
+### 4. Pencarian LIS dari Kedalaman Maksimum
+Fungsi `find_longest_path()` melakukan DFS untuk:
+
+- Mengevaluasi setiap jalur dari node ke node anaknya.
+- Mengembalikan pasangan `(panjang_jalur, daftar_nilai_jalur)`.
+
+Jalur dengan panjang terbesar dianggap sebagai LIS.
+
+### 5. Penyesuaian Output karena Root Dummy
+Karena node awal adalah dummy (`-∞`), hasil pencarian mengandung nilai tersebut.  
+Program menghapusnya dengan:
+
 ```python
-[4, 1, 13, 7, 0, 2, 8, 11, 3]
+return max_len - 1, subsequence[1:]
 ```
 
-Modifikasi Input:
-Anda dapat mengubah isi list `input_sequence` pada file tugas_LMIS.py untuk menguji urutan angka lainnya.
+Artinya:
+
+- Panjang dikurangi 1.
+- Nilai pertama (dummy) diabaikan.
+
+Penyesuaian ini memastikan output akhir hanya berisi angka asli dari sequence.
 
 ---
-
-## Output Program
-
-Saat dijalankan, program akan menampilkan:
-
-1. Urutan Angka Input  
-   Menampilkan kembali urutan angka awal yang diproses.
-
-2. Panjang LIS  
-   Menampilkan jumlah elemen dari sub-urutan naik terpanjang yang ditemukan.
-
-3. Salah Satu LIS  
-   Contoh hasil urutan naik terpanjang, misalnya:
-   ```
-   [4, 7, 8, 11]
-   ```
-
-4. Penjelasan Metode  
-   Deskripsi singkat mengenai cara kerja Tree dan DFS untuk menemukan LMIS.
-
----
-
-## Metode yang Digunakan
-
-Program membangun sebuah struktur Tree yang berisi seluruh kemungkinan jalur sub-urutan naik. Prinsip kerjanya:
-
-- Setiap angka dapat menjadi node awal atau bagian dari jalur.
-- Cabang baru hanya dibuat jika angka berikutnya lebih besar dari angka saat ini.
-- DFS digunakan untuk menelusuri semua jalur.
-- Jalur terpanjang dipilih sebagai hasil Largest Monotonically Increasing Subsequence.
-
-Pendekatan ini memberikan gambaran struktural dari proses pencarian LIS.
-
----
-
-## Cara Menjalankan Program
-
-1. Pastikan Python sudah terinstal.
-2. Buka terminal atau command prompt.
-3. Jalankan:
-   ```bash
-   python tugas_LMIS.py
-   ```
-4. Hasil akan muncul di console.
-
----
-
-## Catatan
-
-Anda bebas memodifikasi input sequence dan mengeksplorasi pengembangan algoritma Tree untuk analisis lebih lanjut.
