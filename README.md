@@ -1,6 +1,8 @@
 Knight's Tour
 
 Program Python ini dibuat untuk menyelesaikan permasalahan The Knight's Tour pada papan catur dimensi 8×8 menggunakan algoritma Backtracking yang dioptimasi dengan heuristik. Program juga menyertakan visualisasi grafis jalur perjalanan kuda.
+
+
 Input Program
 
 Pengguna akan diminta memasukkan tiga data berikut secara berurutan:
